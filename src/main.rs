@@ -7,9 +7,9 @@ mod nemo;
 use rocket_contrib::json::Json;
 use serde::ser::{Serialize, SerializeStruct, Serializer};
 
-#[get("/search?<site>&<vertical>&<mp>&<me>")]
-fn index(site: Option<String>, vertical: Option<String>, mp: Option<String>, me: Option<String>) -> Json<nemo::Nemo> {
-    Json(nemo::find_it(site, mp))
+#[get("/search?<site>&<mp>&<me>&<it>")]
+fn index(site: Option<String>, mp: Option<String>, me: Option<String>, it: Option<String>) -> Json<nemo::Nemo> {
+    Json(nemo::find_it(site, mp, me, it))
 }
 
 fn main() {

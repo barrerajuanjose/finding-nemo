@@ -1,13 +1,11 @@
-use std::borrow::Borrow;
-
 pub struct Nemo {
     pub search_url: String,
 }
 
-pub fn find_it(site: Option<String>, mp: Option<String>, me: Option<String>, kind_option: Option<String>) -> Nemo {
+pub fn find_it(site: Option<String>, mp: Option<String>, me: Option<String>, it: Option<String>) -> Nemo {
     let mut search = format!("https://api.mercadolibre.com/sites/{}/searchbackend?q=", site.map_or(String::from("NONE"), |s| s));
 
-    let kind = kind_option.map_or(String::from("NONE"), |s| s);
+    let item_type = it.map_or(String::from("NONE"), |s| s);
     let mercado_pago = mp.map_or(String::from("NONE"), |s| s);
     let mercado_envios = me.map_or(String::from("NONE"), |s| s);
 
@@ -19,7 +17,7 @@ pub fn find_it(site: Option<String>, mp: Option<String>, me: Option<String>, kin
         _ => search += "celulares",
     }
 
-    match kind.as_str() {
+    match item_type.as_str() {
         "to" => search += "&official_store=all",
         "bs" => search += "&power_seller=yes",
         "video" => search += "&has_video=true",
