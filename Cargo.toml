@@ -10,3 +10,6 @@ edition = "2018"
 rocket = "0.4.4"
 serde = "1.0.104"
 rocket_contrib = "0.4.4"
+
+[target.heroku]
+version = "nightly"
