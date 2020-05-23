@@ -1,1 +1,1 @@
-web: target/release/finding-nemo
+web: target/release/finding-nemo-jj
