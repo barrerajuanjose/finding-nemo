@@ -1,4 +1,4 @@
-pub mod search;
+mod search;
 mod nemo;
 
 use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };
@@ -20,7 +20,7 @@ async fn index(req: HttpRequest) -> Result<HttpResponse> {
     let nemo = nemo::find_it(params.get("site"),
                              params.get("mp"),
                              params.get("me"),
-                             params.get("it"));
+                             params.get("it")).await;
 
     Ok(HttpResponse::Ok().json(NemoResponse {
         search_url: nemo.search_url
