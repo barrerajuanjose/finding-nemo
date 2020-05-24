@@ -1,1 +1,1 @@
-web: ./target/finding-nemo
+web: ./finding-nemo
