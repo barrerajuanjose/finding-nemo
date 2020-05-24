@@ -1,4 +1,3 @@
-#![feature(proc_macro_hygiene, decl_macro)]
 mod nemo;
 
 use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };
