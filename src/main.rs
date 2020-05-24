@@ -1,3 +1,4 @@
+pub mod search;
 mod nemo;
 
 use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };

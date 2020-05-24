@@ -1,20 +1,22 @@
+use crate::search::get_host_by_site;
+
 pub struct Nemo {
     pub search_url: String,
 }
 
 pub fn find_it(site: Option<&String>, mp: Option<&String>, me: Option<&String>, it: Option<&String>) -> Nemo {
-    let mut search = format!("https://api.mercadolibre.com/sites/{}/search?q=", site.map_or(String::from("NONE"), |s| s.to_string()));
+    let mut search = get_host_by_site(site.map_or(String::from("NONE"), |s| s.to_string()));
 
     let item_type = it.map_or(String::from("NONE"), |s| s.to_string());
     let mercado_pago = mp.map_or(String::from("NONE"), |s| s.to_string());
     let mercado_envios = me.map_or(String::from("NONE"), |s| s.to_string());
 
     match mercado_pago.as_str() {
-        "psj" => search += "celulares&installments=no_interest",
-        "nopsj" => search += "celulares&installments=yes",
-        "higestprice" => search += "herramientas&sort=price_desc",
-        "lowerprice" => search += "libros&sort=price_asc",
-        _ => search += "celulares",
+        "psj" => search += "?q=celulares&installments=no_interest",
+        "nopsj" => search += "?q=celulares&installments=yes",
+        "higestprice" => search += "?q=herramientas&sort=price_desc",
+        "lowerprice" => search += "?q=libros&sort=price_asc",
+        _ => search += "?q?celulares",
     }
 
     match item_type.as_str() {
