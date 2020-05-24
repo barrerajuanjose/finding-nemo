@@ -1,1 +1,1 @@
-web: ./finding-nemo
+web: ./target/release/finding-nemo

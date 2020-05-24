@@ -1,5 +1,5 @@
 [package]
-name = "findind-nemo"
+name = "finding-nemo"
 version = "0.1.1"
 authors = ["Juan Jose Barrera <barrerajuanjose@gmail.com>"]
 edition = "2018"
