@@ -2,12 +2,12 @@ pub struct Nemo {
     pub search_url: String,
 }
 
-pub fn find_it(site: Option<String>, mp: Option<String>, me: Option<String>, it: Option<String>) -> Nemo {
-    let mut search = format!("https://api.mercadolibre.com/sites/{}/searchbackend?q=", site.map_or(String::from("NONE"), |s| s));
+pub fn find_it(site: Option<&String>, mp: Option<&String>, me: Option<&String>, it: Option<&String>) -> Nemo {
+    let mut search = format!("https://api.mercadolibre.com/sites/{}/searchbackend?q=", site.map_or(String::from("NONE"), |s| s.to_string()));
 
-    let item_type = it.map_or(String::from("NONE"), |s| s);
-    let mercado_pago = mp.map_or(String::from("NONE"), |s| s);
-    let mercado_envios = me.map_or(String::from("NONE"), |s| s);
+    let item_type = it.map_or(String::from("NONE"), |s| s.to_string());
+    let mercado_pago = mp.map_or(String::from("NONE"), |s| s.to_string());
+    let mercado_envios = me.map_or(String::from("NONE"), |s| s.to_string());
 
     match mercado_pago.as_str() {
         "psj" => search += "celulares&installments=no_interest",

@@ -1,29 +1,43 @@
 #![feature(proc_macro_hygiene, decl_macro)]
-
-#[macro_use] extern crate rocket;
-
 mod nemo;
 
-use rocket_contrib::json::Json;
-use serde::ser::{Serialize, SerializeStruct, Serializer};
+use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };
+use serde::{ Deserialize, Serialize };
+use std::collections::HashMap;
 
-#[get("/search?<site>&<mp>&<me>&<it>")]
-fn index(site: Option<String>, mp: Option<String>, me: Option<String>, it: Option<String>) -> Json<nemo::Nemo> {
-    Json(nemo::find_it(site, mp, me, it))
+async fn index(req: HttpRequest) -> Result<HttpResponse> {
+    let params: HashMap<String, String> = req
+        .uri()
+        .query()
+        .map(|v| {
+            url::form_urlencoded::parse(v.as_bytes())
+                .into_owned()
+                .collect()
+        })
+        .unwrap_or_else(HashMap::new);
+
+    let nemo = nemo::find_it(params.get("site"),
+                             params.get("mp"),
+                             params.get("me"),
+                             params.get("it"));
+
+    Ok(HttpResponse::Ok().json(NemoResponse {
+        search_url: nemo.search_url
+    }))
 }
 
-fn main() {
-    rocket::ignite().mount("/", routes![index]).launch();
+#[actix_rt::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/search", web::get().to(index))
+        })
+        .bind("127.0.0.1:8088")?
+        .run()
+        .await
 }
 
-// This is what #[derive(Serialize)] would generate.
-impl Serialize for nemo::Nemo {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: Serializer,
-    {
-        let mut s = serializer.serialize_struct("Nemo", 1)?;
-        s.serialize_field("search_url", &self.search_url)?;
-        s.end()
-    }
+#[derive(Serialize, Deserialize)]
+struct NemoResponse {
+    search_url: String,
 }
