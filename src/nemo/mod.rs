@@ -3,7 +3,7 @@ pub struct Nemo {
 }
 
 pub fn find_it(site: Option<&String>, mp: Option<&String>, me: Option<&String>, it: Option<&String>) -> Nemo {
-    let mut search = format!("https://api.mercadolibre.com/sites/{}/searchbackend?q=", site.map_or(String::from("NONE"), |s| s.to_string()));
+    let mut search = format!("https://api.mercadolibre.com/sites/{}/search?q=", site.map_or(String::from("NONE"), |s| s.to_string()));
 
     let item_type = it.map_or(String::from("NONE"), |s| s.to_string());
     let mercado_pago = mp.map_or(String::from("NONE"), |s| s.to_string());
