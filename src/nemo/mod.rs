@@ -3,6 +3,7 @@ use crate::search::get_items_ids;
 
 pub struct Nemo {
     pub search_url: String,
+    pub item_ids: Vec<String>,
 }
 
 pub async fn find_it(site: Option<&String>, mp: Option<&String>, me: Option<&String>, it: Option<&String>) -> Nemo {
@@ -33,8 +34,10 @@ pub async fn find_it(site: Option<&String>, mp: Option<&String>, me: Option<&Str
         _ => println!("{}", "Not value".to_string()),
     }
 
-    return get_items_ids(search_url.as_str()).await.map_or(Nemo{search_url: String::from("")}, |a|
-        Nemo {
-        search_url
-        });
+    let item_ids = get_items_ids(site, search_url.as_str()).await;
+
+    return Nemo {
+        search_url,
+        item_ids,
+    }
 }

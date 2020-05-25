@@ -2,7 +2,7 @@ mod search;
 mod nemo;
 
 use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };
-use serde::{ Deserialize, Serialize };
+use serde::{ Serialize };
 use std::collections::HashMap;
 use std::env;
 
@@ -23,7 +23,8 @@ async fn index(req: HttpRequest) -> Result<HttpResponse> {
                              params.get("it")).await;
 
     Ok(HttpResponse::Ok().json(NemoResponse {
-        search_url: nemo.search_url
+        search_url: nemo.search_url,
+        item_ids: nemo.item_ids,
     }))
 }
 
@@ -43,7 +44,8 @@ async fn main() -> std::io::Result<()> {
         .await
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 struct NemoResponse {
     search_url: String,
+    item_ids: Vec<String>,
 }
