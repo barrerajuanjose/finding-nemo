@@ -6,35 +6,44 @@ pub struct Nemo {
     pub item_ids: Vec<String>,
 }
 
-pub async fn find_it(site: Option<&String>, mp: Option<&String>, me: Option<&String>, it: Option<&String>) -> Nemo {
-    let mut search_url = get_host_by_site(site.map_or(String::from("NONE"), |s| s.to_string()));
-
+pub async fn find_it(site_param: Option<&String>, mp: Option<&String>, me: Option<&String>, it: Option<&String>) -> Nemo {
+    let site = site_param.map_or(String::from("NONE"), |s| s.to_string());
     let item_type = it.map_or(String::from("NONE"), |s| s.to_string());
     let mercado_pago = mp.map_or(String::from("NONE"), |s| s.to_string());
     let mercado_envios = me.map_or(String::from("NONE"), |s| s.to_string());
 
+    let (q_highest_price, q_lowest_price) = if site.as_str() == "MLB" {
+        ("ferramientas", "livros")
+    } else {
+        ("herramientas", "libros")
+    };
+
+    let mut params = String::from("");
+
     match mercado_pago.as_str() {
-        "psj" => search_url += "?q=celulares&installments=no_interest",
-        "nopsj" => search_url += "?q=celulares&installments=yes",
-        "higestprice" => search_url += "?q=herramientas&sort=price_desc",
-        "lowerprice" => search_url += "?q=libros&sort=price_asc",
-        _ => search_url += "?q?celulares",
+        "psj" => params += "?q=celulares&installments=no_interest",
+        "installments" => params += "?q=celulares&installments=yes",
+        "highestprice" => params += format!("?q={}&sort=price_desc", q_highest_price).as_str(),
+        "lowestprice" => params += format!("?q={}&sort=price_asc", q_lowest_price).as_str(),
+        _ => params += "?q=celulares",
     }
 
     match item_type.as_str() {
-        "to" => search_url += "&official_store=all",
-        "bs" => search_url += "&power_seller=yes",
-        "video" => search_url += "&has_video=true",
+        "to" => params += "&official_store=all",
+        "bs" => params += "&power_seller=yes",
+        "video" => params += "&has_video=true",
         _ => println!("{}", "Not value".to_string()),
     }
 
     match mercado_envios.as_str() {
-        "me1" | "me2" => search_url += "&shipping=mercadoenvios",
-        "full" => search_url += "&shipping=fulfillment",
+        "me1" | "me2" => params += "&shipping=mercadoenvios",
+        "full" => params += "&shipping=fulfillment",
         _ => println!("{}", "Not value".to_string()),
     }
 
-    let item_ids = get_items_ids(site, search_url.as_str()).await;
+    let item_ids = get_items_ids(site.as_str(), params.as_str()).await;
+
+    let search_url = format!("{}{}", get_host_by_site(site), params);
 
     return Nemo {
         search_url,
