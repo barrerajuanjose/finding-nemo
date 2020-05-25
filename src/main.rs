@@ -6,7 +6,7 @@ use serde::{ Serialize };
 use std::collections::HashMap;
 use std::env;
 
-async fn index(req: HttpRequest) -> Result<HttpResponse> {
+async fn search(req: HttpRequest) -> Result<HttpResponse> {
     let params: HashMap<String, String> = req
         .uri()
         .query()
@@ -28,6 +28,12 @@ async fn index(req: HttpRequest) -> Result<HttpResponse> {
     }))
 }
 
+async fn index(_req: HttpRequest) -> Result<HttpResponse> {
+    Ok(HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(include_str!("../static/examples.html")))
+}
+
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     let port = env::var("PORT")
@@ -37,7 +43,8 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .route("/search", web::get().to(index))
+            .route("/", web::get().to(index))
+            .route("/search", web::get().to(search))
         })
         .bind(("0.0.0.0", port))?
         .run()
