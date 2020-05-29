@@ -12,20 +12,14 @@ pub async fn find_it(site_param: Option<&String>, mp: Option<&String>, me: Optio
     let mercado_pago = mp.map_or(String::from("NONE"), |s| s.to_string());
     let mercado_envios = me.map_or(String::from("NONE"), |s| s.to_string());
 
-    let (q_highest_price, q_lowest_price) = if site.as_str() == "MLB" {
-        ("ferramientas", "livros")
-    } else {
-        ("herramientas", "libros")
-    };
-
-    let mut params = String::from("");
+    let mut params = format!("?q={}", resolve_q(site.as_str(), item_type.as_str(), mercado_pago.as_str()));
 
     match mercado_pago.as_str() {
-        "psj" => params += "?q=celulares&installments=no_interest",
-        "installments" => params += "?q=celulares&installments=yes",
-        "highestprice" => params += format!("?q={}&sort=price_desc", q_highest_price).as_str(),
-        "lowestprice" => params += format!("?q={}&sort=price_asc", q_lowest_price).as_str(),
-        _ => params += "?q=celulares",
+        "psj" => params += "&installments=no_interest",
+        "installments" => params += "&installments=yes",
+        "highestprice" => params += "&sort=price_desc",
+        "lowestprice" => params += "&sort=price_asc",
+        _ => println!("{}", "Not value".to_string()),
     }
 
     match item_type.as_str() {
@@ -48,5 +42,23 @@ pub async fn find_it(site_param: Option<&String>, mp: Option<&String>, me: Optio
     return Nemo {
         search_url,
         item_ids,
+    }
+}
+
+fn resolve_q(site: &str, it: &str, mp: &str) -> String {
+    let (q_highest_price, q_lowest_price) = if site == "MLB" {
+        ("ferramientas", "livros")
+    } else {
+        ("herramientas", "libros")
+    };
+
+    if it == "granel" {
+        String::from("piso-vinilico")
+    } else if mp == "highestprice" {
+        q_highest_price.to_string()
+    } else if mp == "lowestprice" {
+        q_lowest_price.to_string()
+    } else {
+        String::from("celulares")
     }
 }
