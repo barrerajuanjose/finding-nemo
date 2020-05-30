@@ -1,38 +1,60 @@
-<a href='http://finding-nemo-jj.herokuapp.com/search?mp=psj&site=MLA'>Sem Juros</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?mp=installments&site=MLA'>Con cuotas</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?mp=highestprice&site=MLA'>Caros (Sin MP)</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?mp=lowestprice&site=MLA'>Baratos</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?me=full&site=MLA'>Full</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?me=me2&site=MLA'>Con shipping</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=to&site=MLA'>Tiendas Oficiales</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=bs&site=MLA'>Mejores vendedores</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=video&site=MLA'>Con videos</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=granel&site=MLA'>Venta a granel</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=manufacturing&site=MLA'>TODO Tiempo manufactura</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?me=cpg&site=MLA'>TODO envío internacional</a><br/>
-<h1>Posibles query params</h1>
-<h2>Param site (site)</h2>
-<ul>
-    <li>MLB</li>
-    <li>MLA</li>
-    <li>MLM</li>
-</ul>
-<h2>Param mp (mercado pago)</h2>
-<ul>
-    <li>psj</li>
-    <li>installments</li>
-    <li>lowestprice</li>
-</ul>
-<h2>Param me (mercado envios)</h2>
-<ul>
-    <li>me1 o me2</li>
-    <li>full</li>
-    <li>cpg TODO</li>
-</ul>
-<h2>Param it (item type)</h2>
-<ul>
-    <li>to - Tienda Oficial</li>
-    <li>bs - best sellers</li>
-    <li>granel - Venta a Granel</li>
-    <li>manufacturing - TODO Tiempo de manufactura</li>
-</ul>
+<form action="/search" method="get">
+    <label for="sites">Site:</label>
+    <select name="site" id="sites">
+        <option value="MLB">MLB</option>
+        <option value="MLA">MLA</option>
+        <option value="MLM">MLM</option>
+    </select>
+
+    <br>
+
+    <label for="itemtypes">Items:</label>
+    <select name="it" id="itemtypes">
+        <option value="">Cualquiera</option>
+        <option value="to">Tienda Oficial</option>
+        <option value="ds">Mejores vendedores</option>
+        <option value="granel">Venta a granel</option>
+        <option value="manufacturing">Con tiempo de Manufactura (TODO)</option>
+    </select>
+
+    <br>
+
+    <label for="mercadopago">Mercado pago:</label>
+    <select name="mp" id="mercadopago">
+        <option value="">Cualquiera</option>
+        <option value="pjs">Cuotas sin interes</option>
+        <option value="installments">Con cuotas con y sin intereses</option>
+        <option value="highestprice">Items con precios altos, no se pueden pagar con MP</option>
+        <option value="lowestprice">Items con precios bajos</option>
+    </select>
+
+    <br>
+
+    <label for="mercadoenvios">Mercado envios:</label>
+    <select name="me" id="mercadoenvios">
+        <option value="">Cualquiera</option>
+        <option value="me2">Con ME</option>
+        <option value="full">Full</option>
+        <option value="cpg">Envio internacional (TODO)</option>
+    </select>
+
+    <br>
+    
+    <input type="submit" value="Find It">
+</form>
+
+<br/>
+
+<h2>Ejemplos en MLB</h2>
+<a href='http://finding-nemo-jj.herokuapp.com/search?mp=psj&site=MLB'>Sem Juros</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?mp=installments&site=MLB'>Con cuotas</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?mp=highestprice&site=MLB'>Caros (Sin MP)</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?mp=lowestprice&site=MLB'>Baratos</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?me=full&site=MLB'>Full</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?me=me2&site=MLB'>Con shipping</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?it=to&site=MLB'>Tiendas Oficiales</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?it=bs&site=MLB'>Mejores vendedores</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?it=video&site=MLB'>Con videos</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?it=granel&site=MLB'>Venta a granel</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?it=manufacturing&site=MLB'>TODO Tiempo manufactura</a><br/>
+<a href='http://finding-nemo-jj.herokuapp.com/search?me=cpg&site=MLB'>TODO envío internacional</a><br/>
