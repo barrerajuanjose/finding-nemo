@@ -1,4 +1,7 @@
-<form action="/search" method="get">
+<head>
+    <title>Finding Nemo</title>
+</head>
+<body>
     <label for="sites">Site:</label>
     <select name="site" id="sites">
         <option value="MLB">MLB</option>
@@ -39,22 +42,64 @@
     </select>
 
     <br>
-    
-    <input type="submit" value="Find It">
-</form>
 
-<br/>
+    <input type="button" onclick="getNemos()" value="Find It">
 
-<h2>Ejemplos en MLB</h2>
-<a href='http://finding-nemo-jj.herokuapp.com/search?mp=psj&site=MLB'>Sem Juros</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?mp=installments&site=MLB'>Con cuotas</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?mp=highestprice&site=MLB'>Caros (Sin MP)</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?mp=lowestprice&site=MLB'>Baratos</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?me=full&site=MLB'>Full</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?me=me2&site=MLB'>Con shipping</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=to&site=MLB'>Tiendas Oficiales</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=bs&site=MLB'>Mejores vendedores</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=video&site=MLB'>Con videos</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=granel&site=MLB'>Venta a granel</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?it=manufacturing&site=MLB'>TODO Tiempo manufactura</a><br/>
-<a href='http://finding-nemo-jj.herokuapp.com/search?me=cpg&site=MLB'>TODO envío internacional</a><br/>
+    <div id="nemos">
+
+    </div>
+
+    <script>
+        function getNemos() {
+            document.getElementById("nemos").innerHTML = "";
+
+            let site = getSelectedValue("sites");
+            let it = getSelectedValue("itemtypes");
+            let mp = getSelectedValue("mercadopago");
+            let me = getSelectedValue("mercadoenvios");
+
+            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me;
+
+            fetch(url)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (result) {
+                    let html = "<a href='" + result.search_url + "'>Search url</a><br>";
+                    html += "Items ids:<br>";
+                    result.item_ids.forEach(function(itemId) {
+                        html += getItemUrl(itemId);
+                    });
+                    document.getElementById("nemos").innerHTML = html;
+                })
+                .catch(function (error) {
+                    document.getElementById("nemos").innerHTML = error;
+                });
+        }
+
+        function getSelectedValue(comboId) {
+            let e = document.getElementById(comboId);
+            return e.options[e.selectedIndex].value;
+        }
+
+        function getItemUrl(itemId) {
+            return "<a href='https://api.mercadolibre.com/items/" + itemId + "'>" + itemId + "</a><br>";
+        }
+    </script>
+
+    <br/>
+
+    <h2>Ejemplos en MLB</h2>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?mp=psj&site=MLB'>Sem Juros</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?mp=installments&site=MLB'>Con cuotas</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?mp=highestprice&site=MLB'>Caros (Sin MP)</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?mp=lowestprice&site=MLB'>Baratos</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?me=full&site=MLB'>Full</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?me=me2&site=MLB'>Con shipping</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?it=to&site=MLB'>Tiendas Oficiales</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?it=bs&site=MLB'>Mejores vendedores</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?it=video&site=MLB'>Con videos</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?it=granel&site=MLB'>Venta a granel</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?it=manufacturing&site=MLB'>TODO Tiempo manufactura</a><br/>
+    <a href='http://finding-nemo-jj.herokuapp.com/search?me=cpg&site=MLB'>TODO envío internacional</a><br/>
+</body>
