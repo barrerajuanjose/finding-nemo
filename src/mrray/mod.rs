@@ -1,6 +1,14 @@
 pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envios: &str) -> String {
     let mut params = format!("?q={}", resolve_q(site, item_type, mercado_pago));
 
+    if mercado_envios == "cbt" {
+        if site == "MLB" {
+            params = String::from("?official_store=2500")
+        } else if site == "MLM" {
+            params = String::from("?seller_id=329558822")
+        }
+    }
+
     match mercado_pago {
         "psj" => params += "&installments=no_interest",
         "installments" => params += "&installments=yes",
