@@ -1,5 +1,6 @@
 mod search;
-mod nemo;
+mod marlin;
+mod mrray;
 
 use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };
 use serde::{ Serialize };
@@ -17,10 +18,11 @@ async fn search(req: HttpRequest) -> Result<HttpResponse> {
         })
         .unwrap_or_else(HashMap::new);
 
-    let nemo = nemo::find_it(params.get("site"),
-                             params.get("mp"),
-                             params.get("me"),
-                             params.get("it")).await;
+    let nemo = marlin::find_nemo(params.get("site"),
+                                 params.get("mp"),
+                                 params.get("me"),
+                                 params.get("it"),
+                                    params.get("variations")).await;
 
     Ok(HttpResponse::Ok().json(NemoResponse {
         search_url: nemo.search_url,
