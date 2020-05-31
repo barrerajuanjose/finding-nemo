@@ -1,5 +1,5 @@
 pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envios: &str, variations: &str) -> String {
-    let mut params = format!("?q={}", resolve_q(site, item_type, mercado_pago, variations));
+    let mut params = String::from("");
 
     if mercado_envios == "cbt" {
         if site == "MLB" {
@@ -7,6 +7,14 @@ pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envio
         } else if site == "MLM" {
             params = String::from("?seller_id=329558822")
         }
+    } else if item_type == "cpg" {
+        match site {
+            "MLB" => params = String::from("?deal=MLB1960"),
+            "MLA" => params = String::from("?deal=MLA3935"),
+            _ => params = String::from("?deal=MLM1943"),
+        }
+    } else {
+        params = format!("?q={}", resolve_q(site, item_type, mercado_pago, variations));
     }
 
     match mercado_pago {
