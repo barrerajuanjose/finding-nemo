@@ -22,6 +22,16 @@
 
     <br>
 
+    <label for="variations">Variations:</label>
+    <select name="variations" id="variations">
+        <option value="">Cualquiera</option>
+        <option value="one">Una</option>
+        <option value="two">Dos</option>
+        <option value="more">Más de 2</option>
+    </select>
+
+    <br>
+
     <label for="mercadopago">Mercado pago:</label>
     <select name="mp" id="mercadopago">
         <option value="">Cualquiera</option>
@@ -57,8 +67,9 @@
             let it = getSelectedValue("itemtypes");
             let mp = getSelectedValue("mercadopago");
             let me = getSelectedValue("mercadoenvios");
+            let variations = getSelectedValue("variations");
 
-            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me;
+            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me + "&variations=" + variations;
 
             fetch(url)
                 .then(function (response) {

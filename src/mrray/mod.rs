@@ -1,5 +1,5 @@
-pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envios: &str) -> String {
-    let mut params = format!("?q={}", resolve_q(site, item_type, mercado_pago));
+pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envios: &str, variations: &str) -> String {
+    let mut params = format!("?q={}", resolve_q(site, item_type, mercado_pago, variations));
 
     if mercado_envios == "cbt" {
         if site == "MLB" {
@@ -33,11 +33,11 @@ pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envio
     params
 }
 
-fn resolve_q(site: &str, it: &str, mp: &str) -> String {
-    let (q_highest_price, q_lowest_price) = if site == "MLB" {
-        ("ferramientas", "livros")
+fn resolve_q(site: &str, it: &str, mp: &str, variations: &str) -> String {
+    let (q_highest_price, q_lowest_price, q_variations_one, q_variations_two, q_variations_more) = if site == "MLB" {
+        ("ferramientas", "livros", "oculos", "tenis", "camisetas-masculino")
     } else {
-        ("herramientas", "libros")
+        ("herramientas", "libros", "lentes", "zapatillas", "remeras")
     };
 
     if it == "granel" {
@@ -46,6 +46,12 @@ fn resolve_q(site: &str, it: &str, mp: &str) -> String {
         q_highest_price.to_string()
     } else if mp == "lowestprice" {
         q_lowest_price.to_string()
+    } else if variations == "one" {
+        q_variations_one.to_string()
+    } else if variations == "two" {
+        q_variations_two.to_string()
+    } else if variations == "more" {
+        q_variations_more.to_string()
     } else {
         String::from("celulares")
     }

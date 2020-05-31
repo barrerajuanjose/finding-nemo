@@ -21,7 +21,8 @@ async fn search(req: HttpRequest) -> Result<HttpResponse> {
     let nemo = marlin::find_nemo(params.get("site"),
                                  params.get("mp"),
                                  params.get("me"),
-                                 params.get("it")).await;
+                                 params.get("it"),
+                                    params.get("variations")).await;
 
     Ok(HttpResponse::Ok().json(NemoResponse {
         search_url: nemo.search_url,
