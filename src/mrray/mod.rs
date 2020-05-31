@@ -3,18 +3,18 @@ pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envio
 
     if mercado_envios == "cbt" {
         if site == "MLB" {
-            params = String::from("?official_store=2500")
+            params = String::from("official_store=2500")
         } else if site == "MLM" {
-            params = String::from("?seller_id=329558822")
+            params = String::from("seller_id=329558822")
         }
     } else if item_type == "cpg" {
         match site {
-            "MLB" => params = String::from("?deal=MLB1960"),
-            "MLA" => params = String::from("?deal=MLA3935"),
-            _ => params = String::from("?deal=MLM1943"),
+            "MLB" => params = String::from("deal=MLB1960"),
+            "MLA" => params = String::from("deal=MLA3935"),
+            _ => params = String::from("deal=MLM1943"),
         }
     } else {
-        params = format!("?q={}", resolve_q(site, item_type, mercado_pago, variations));
+        params = format!("q={}", resolve_q(site, item_type, mercado_pago, variations));
     }
 
     match mercado_pago {
@@ -29,7 +29,7 @@ pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envio
         "to" => params += "&official_store=all",
         "bs" => params += "&power_seller=yes",
         "video" => params += "&has_video=true",
-        "refurbished" => params += "ITEM_CONDITION=2230582",
+        "refurbished" => params += "&ITEM_CONDITION=2230582",
         _ => println!("{}", "Not value".to_string()),
     }
 

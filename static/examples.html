@@ -81,8 +81,8 @@
                 .then(function (result) {
                     let html = "<a href='" + result.search_url + "'>Search url</a><br>";
                     html += "Items ids:<br>";
-                    result.item_ids.forEach(function(itemId) {
-                        html += getItemUrl(itemId);
+                    result.items.forEach(function(item) {
+                        html += getItemUrl(item);
                     });
                     document.getElementById("nemos").innerHTML = html;
                 })
@@ -96,8 +96,8 @@
             return e.options[e.selectedIndex].value;
         }
 
-        function getItemUrl(itemId) {
-            return "<a href='https://api.mercadolibre.com/items/" + itemId + "'>" + itemId + "</a><br>";
+        function getItemUrl(item) {
+            return "<a href='" + item.permalink + "'>" + item.id + "</a><br>";
         }
     </script>
 

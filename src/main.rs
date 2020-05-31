@@ -6,6 +6,7 @@ use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };
 use serde::{ Serialize };
 use std::collections::HashMap;
 use std::env;
+use crate::marlin::Nemo;
 
 async fn search(req: HttpRequest) -> Result<HttpResponse> {
     let params: HashMap<String, String> = req
@@ -24,10 +25,7 @@ async fn search(req: HttpRequest) -> Result<HttpResponse> {
                                  params.get("it"),
                                     params.get("variations")).await;
 
-    Ok(HttpResponse::Ok().json(NemoResponse {
-        search_url: nemo.search_url,
-        item_ids: nemo.item_ids,
-    }))
+    Ok(HttpResponse::Ok().json(map_nemo_to_dto(nemo)))
 }
 
 async fn index(_req: HttpRequest) -> Result<HttpResponse> {
@@ -54,7 +52,29 @@ async fn main() -> std::io::Result<()> {
 }
 
 #[derive(Serialize)]
-struct NemoResponse {
+struct NemoDto {
     search_url: String,
-    item_ids: Vec<String>,
+    items: Vec<ItemDto>,
+}
+
+#[derive(Serialize)]
+struct ItemDto {
+    id: String,
+    permalink: String,
+}
+
+fn map_nemo_to_dto(nemo: Nemo) -> NemoDto {
+    let mut items = Vec::new();
+
+    for result in nemo.items {
+        items.push(ItemDto {
+            id: result.id,
+            permalink: result.permalink
+        });
+    }
+
+    return NemoDto {
+        search_url: nemo.search_url,
+        items,
+    }
 }
