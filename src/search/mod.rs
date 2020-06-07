@@ -17,6 +17,10 @@ pub fn get_host_by_site(site: &str) -> String {
     format!("https://api.mercadolibre.com/sites/{}/search", site)
 }
 
+pub fn get_seller_search(seller_id: u32) -> String {
+    format!("https://api.mercadolibre.com/sites/{}/search", seller_id)
+}
+
 pub async fn get_items_ids(site: &str, params: &str) -> Vec<ResultsResponse> {
     get_search(site, params).await.map_or(Vec::new(), |search_response| {
         let mut results = search_response.results.map_or(Vec::new(), |results| results);
@@ -36,8 +40,8 @@ pub async fn get_items_ids(site: &str, params: &str) -> Vec<ResultsResponse> {
 }
 
 async fn get_search(site: &str, params: &str) -> Result<SearchBackendResponse, Error> {
-    let url = format!("https://api.mercadolibre.com/sites/{}/searchbackend?limit=200{}", site, params);
-    
+    let url = format!("https://api.mercadolibre.com/sites/{}/searchbackend?limit=5&{}", site, params);
+    println!("DO api call [{}]", url);
     Ok(reqwest::get(url.as_str()).await?.json().await?)
 }
 
