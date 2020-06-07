@@ -58,13 +58,24 @@
 
     <input type="button" onclick="getNemos()" value="Find It">
 
-    <div id="nemos">
+    <div id="nemo_search">
 
+    </div>
+
+    <div id="nemos" style="display: grid; grid-template-columns: repeat(2, 1fr);">
+        <div id="nemo_sellers">
+
+        </div>
+        <div id="nemo_items">
+
+        </div>
     </div>
 
     <script>
         function getNemos() {
-            document.getElementById("nemos").innerHTML = "";
+            document.getElementById("nemo_search").innerHTML = "";
+            document.getElementById("nemo_sellers").innerHTML = "";
+            document.getElementById("nemo_items").innerHTML = "";
 
             let site = getSelectedValue("sites");
             let it = getSelectedValue("itemtypes");
@@ -80,20 +91,45 @@
                 })
                 .then(function (result) {
                     let html = "<a href='" + result.search_url + "'>Search url</a><br>";
-                    html += "Items ids:<br>";
-                    result.items.forEach(function(item) {
-                        html += getItemUrl(item);
-                    });
-                    document.getElementById("nemos").innerHTML = html;
+                    document.getElementById("nemo_search").innerHTML = html;
+
+                    processSellersTypes(result.sellers_types)
+
+                    processItems(result.items);
                 })
                 .catch(function (error) {
-                    document.getElementById("nemos").innerHTML = error;
+                    document.getElementById("nemo_items").innerHTML = error;
                 });
         }
 
         function getSelectedValue(comboId) {
             let e = document.getElementById(comboId);
             return e.options[e.selectedIndex].value;
+        }
+
+        function processSellersTypes(sellers_types) {
+            let html = "Sellers types:<br>";
+
+            sellers_types.forEach(function(seller_type) {
+                html += "<ul>";
+                html += "<dt>" + seller_type.id + "</dt>";
+                seller_type.sellers.forEach(function(seller) {
+                    html += "<dd><a href='" + seller.search_url + "'>" + seller.id + "</a></dd>";
+                });
+                html += "</ul>";
+            });
+
+            document.getElementById("nemo_sellers").innerHTML = html;
+        }
+
+        function processItems(items) {
+            let html = "Items ids:<br>";
+
+            items.forEach(function(item) {
+                html += getItemUrl(item);
+            });
+
+            document.getElementById("nemo_items").innerHTML = html;
         }
 
         function getItemUrl(item) {

@@ -1,6 +1,8 @@
-mod search;
-mod marlin;
 mod mrray;
+mod marlin;
+mod search;
+mod item;
+mod seller;
 
 use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };
 use serde::{ Serialize };
@@ -55,6 +57,7 @@ async fn main() -> std::io::Result<()> {
 struct NemoDto {
     search_url: String,
     items: Vec<ItemDto>,
+    sellers_types: Vec<SellerTypeDto>,
 }
 
 #[derive(Serialize)]
@@ -63,8 +66,22 @@ struct ItemDto {
     permalink: String,
 }
 
+#[derive(Serialize)]
+struct SellerTypeDto {
+    id: String,
+    sellers: Vec<SellerDto>,
+}
+
+#[derive(Serialize)]
+struct SellerDto {
+    id: u32,
+    reputation: String,
+    search_url: String,
+}
+
 fn map_nemo_to_dto(nemo: Nemo) -> NemoDto {
     let mut items = Vec::new();
+    let mut sellers_types = Vec::new();
 
     for result in nemo.items {
         items.push(ItemDto {
@@ -73,8 +90,26 @@ fn map_nemo_to_dto(nemo: Nemo) -> NemoDto {
         });
     }
 
+    for seller_type_entry in nemo.sellers_types {
+        let mut sellers = Vec::new();
+
+        for seller_nemo in seller_type_entry.1 {
+            sellers.push(SellerDto {
+                id: seller_nemo.id,
+                reputation: seller_nemo.reputation,
+                search_url: seller_nemo.search_url,
+            })
+        }
+
+        sellers_types.push(SellerTypeDto {
+            id: seller_type_entry.0,
+            sellers,
+        });
+    }
+
     return NemoDto {
         search_url: nemo.search_url,
         items,
+        sellers_types
     }
 }
