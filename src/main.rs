@@ -1,3 +1,4 @@
+mod seller;
 mod search;
 mod marlin;
 mod mrray;
