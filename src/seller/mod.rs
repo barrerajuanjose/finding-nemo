@@ -1,9 +1,9 @@
 use reqwest::Error;
 use serde::{ Deserialize };
 
-struct Seller {
-    id: int,
-    reputation: String,
+pub struct Seller {
+    pub id: int,
+    pub reputation: String,
 }
 
 #[derive(Deserialize)]
