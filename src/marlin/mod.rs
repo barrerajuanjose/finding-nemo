@@ -17,6 +17,7 @@ pub struct ItemNemo {
 }
 
 pub struct SellerNemo {
+    pub id: u32,
     pub reputation: String,
     pub search_url: String,
 }
@@ -58,6 +59,7 @@ async fn map_response_to_nemo(search_url: &str, results: Vec<ResultsResponse>, s
         let sellers_types_key = seller.reputation.as_str().to_string();
 
         sellers_types.entry(sellers_types_key).or_insert_with(Vec::new).push(SellerNemo {
+            id: seller.id,
             reputation: seller.reputation,
             search_url: get_seller_search(site, seller.id),
         })

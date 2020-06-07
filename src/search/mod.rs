@@ -44,7 +44,7 @@ pub async fn get_items_ids(site: &str, params: &str) -> Vec<ResultsResponse> {
 }
 
 async fn get_search(site: &str, params: &str) -> Result<SearchBackendResponse, Error> {
-    let url = format!("https://api.mercadolibre.com/sites/{}/searchbackend?limit=50&{}", site, params);
+    let url = format!("https://api.mercadolibre.com/sites/{}/searchbackend?limit=5&{}", site, params);
     println!("DO api call [{}]", url);
     Ok(reqwest::get(url.as_str()).await?.json().await?)
 }

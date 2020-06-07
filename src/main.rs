@@ -57,7 +57,7 @@ async fn main() -> std::io::Result<()> {
 struct NemoDto {
     search_url: String,
     items: Vec<ItemDto>,
-    sellers_types: HashMap<String, Vec<SellerDto>>,
+    sellers_types: Vec<SellerTypeDto>,
 }
 
 #[derive(Serialize)]
@@ -67,14 +67,21 @@ struct ItemDto {
 }
 
 #[derive(Serialize)]
+struct SellerTypeDto {
+    id: String,
+    sellers: Vec<SellerDto>,
+}
+
+#[derive(Serialize)]
 struct SellerDto {
+    id: u32,
     reputation: String,
     search_url: String,
 }
 
 fn map_nemo_to_dto(nemo: Nemo) -> NemoDto {
     let mut items = Vec::new();
-    let mut sellers_types = HashMap::new();
+    let mut sellers_types = Vec::new();
 
     for result in nemo.items {
         items.push(ItemDto {
@@ -88,12 +95,16 @@ fn map_nemo_to_dto(nemo: Nemo) -> NemoDto {
 
         for seller_nemo in seller_type_entry.1 {
             sellers.push(SellerDto {
+                id: seller_nemo.id,
                 reputation: seller_nemo.reputation,
                 search_url: seller_nemo.search_url,
             })
         }
 
-        sellers_types.insert(seller_type_entry.0, sellers);
+        sellers_types.push(SellerTypeDto {
+            id: seller_type_entry.0,
+            sellers,
+        });
     }
 
     return NemoDto {
