@@ -1,3 +1,5 @@
+use crate::marlin::ItemNemo;
+
 pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envios: &str, variations: &str, item_condition: &str, custom_query: &str) -> String {
     let mut params = String::from("");
 
@@ -46,6 +48,16 @@ pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envio
     }
 
     params
+}
+
+pub fn filter_item_nemo(item_nemo: &ItemNemo, mercado_envios: &str, item_type: &str) -> bool {
+    if mercado_envios == "puis" {
+        item_nemo.has_puis
+    } else if item_type == "manufacturing" {
+        item_nemo.has_manufacturing_time
+    } else {
+        true
+    }
 }
 
 fn resolve_q(site: &str, it: &str, mp: &str, variations: &str, custom_query: &str) -> String {
