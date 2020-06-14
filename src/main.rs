@@ -9,6 +9,8 @@ use serde::{ Serialize };
 use std::collections::HashMap;
 use std::env;
 use crate::marlin::Nemo;
+use std::fs::File;
+use std::io::Read;
 
 async fn search(req: HttpRequest) -> Result<HttpResponse> {
     let params: HashMap<String, String> = req
@@ -25,15 +27,23 @@ async fn search(req: HttpRequest) -> Result<HttpResponse> {
                                  params.get("mp"),
                                  params.get("me"),
                                  params.get("it"),
-                                    params.get("variations")).await;
+                                 params.get("variations"),
+                                 params.get("cq")).await;
 
     Ok(HttpResponse::Ok().json(map_nemo_to_dto(nemo)))
 }
 
 async fn index(_req: HttpRequest) -> Result<HttpResponse> {
+    let current_dir = env::current_dir().unwrap();
+    let index_path = format!("{}{}", current_dir.display(), "/static/examples.html");
+    let mut file = File::open(index_path)?;
+    let mut contents = String::new();
+
+    file.read_to_string(&mut contents)?;
+
     Ok(HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
-        .body(include_str!("../static/examples.html")))
+        .body(contents))
 }
 
 #[actix_rt::main]

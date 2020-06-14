@@ -1,7 +1,6 @@
 <head>
     <title>Finding Nemo</title>
 </head>
-<body>
     <label for="sites">Site:</label>
     <select name="site" id="sites">
         <option value="MLB">MLB</option>
@@ -56,6 +55,11 @@
 
     <br>
 
+    <label for="custom_query">Custom query:</label>
+    <input type="text" id="custom_query">
+
+    <br>
+
     <input type="button" onclick="getNemos()" value="Find It">
 
     <br>
@@ -86,8 +90,9 @@
             let mp = getSelectedValue("mercadopago");
             let me = getSelectedValue("mercadoenvios");
             let variations = getSelectedValue("variations");
+            let custom_query = document.getElementById("custom_query").value;
 
-            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me + "&variations=" + variations;
+            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me + "&variations=" + variations + "&cq=" + custom_query;
 
             fetch(url)
                 .then(function (response) {
