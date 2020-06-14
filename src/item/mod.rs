@@ -14,15 +14,27 @@ struct ItemResponse {
     id: String,
     seller_id: u32,
     permalink: String,
-    shipping: ItemShippingResponse,
+    sale_terms: Vec<SaleTermsResponse>,
+    shipping: ShippingResponse,
 }
 
 #[derive(Deserialize)]
-struct ItemShippingResponse {
+struct SaleTermsResponse {
+    id: String,
+}
+
+impl SaleTermsResponse {
+    fn is_puis(&self) -> bool {
+        self.id == "MANUFACTURING_TIME"
+    }
+}
+
+#[derive(Deserialize)]
+struct ShippingResponse {
     store_pick_up: bool,
 }
 
-impl ItemShippingResponse {
+impl ShippingResponse {
     fn has_puis(&self) -> bool {
         self.store_pick_up
     }
@@ -38,7 +50,7 @@ pub async fn get_item(id: &str) -> Item {
                         permalink: item_response.permalink,
                         seller_id: item_response.seller_id,
                         has_puis: item_response.shipping.has_puis(),
-                        has_manufacturing_time: false,
+                        has_manufacturing_time: item_response.sale_terms.iter().find(|sale_term| sale_term.is_puis()).is_some(),
                     }
                 })
 }
