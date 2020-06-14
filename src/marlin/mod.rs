@@ -4,6 +4,7 @@ use crate::mrray::get_params;
 use std::collections::{HashMap, HashSet};
 use crate::item::get_item;
 use crate::seller::get_seller;
+use futures::future;
 
 pub struct Nemo {
     pub search_url: String,
@@ -14,6 +15,7 @@ pub struct Nemo {
 pub struct ItemNemo {
     pub id: String,
     pub permalink: String,
+    seller_id: u32,
 }
 
 pub struct SellerNemo {
@@ -39,30 +41,34 @@ pub async fn find_nemo(site_param: Option<&String>, mp: Option<&String>, me: Opt
 }
 
 async fn map_response_to_nemo(search_url: &str, results: Vec<ResultsResponse>, site: &str) -> Nemo {
-    let mut items = Vec::new();
+    let items_ids: Vec<&str> = results.iter().map(|result| { result.id.as_str() }).collect();
     let mut sellers_types = HashMap::new();
-    let mut sellers_ids = HashSet::new();
 
-    for result in results {
-        let item = get_item(result.id.as_str()).await;
+    let items = future::join_all(items_ids.into_iter().map(|item_id| async move {
+        let item = get_item(item_id).await;
 
-        items.push(ItemNemo {
+        ItemNemo {
             id: item.id,
-            permalink: item.permalink
-        });
+            permalink: item.permalink,
+            seller_id: item.seller_id,
+        }
+    })).await;
 
-        sellers_ids.insert(item.seller_id);
-    }
+    let sellers_ids: HashSet<u32> = items.iter().map(|item| { item.seller_id }).collect();
 
-    for seller_id in sellers_ids {
+    let sellers = future::join_all(sellers_ids.into_iter().map(|seller_id| async move {
         let seller = get_seller(seller_id).await;
-        let sellers_types_key = seller.reputation.as_str().to_string();
 
-        sellers_types.entry(sellers_types_key).or_insert_with(Vec::new).push(SellerNemo {
+        SellerNemo {
             id: seller.id,
             reputation: seller.reputation,
             search_url: get_seller_search(site, seller.id),
-        })
+        }
+    })).await;
+
+    for seller in sellers {
+        let sellers_types_key = seller.reputation.as_str().to_string();
+        sellers_types.entry(sellers_types_key).or_insert_with(Vec::new).push(seller)
     }
 
     Nemo {
