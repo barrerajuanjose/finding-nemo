@@ -27,7 +27,8 @@ async fn search(req: HttpRequest) -> Result<HttpResponse> {
                                  params.get("mp"),
                                  params.get("me"),
                                  params.get("it"),
-                                    params.get("variations")).await;
+                                 params.get("variations"),
+                                 params.get("cq")).await;
 
     Ok(HttpResponse::Ok().json(map_nemo_to_dto(nemo)))
 }

@@ -92,7 +92,7 @@
             let variations = getSelectedValue("variations");
             let custom_query = document.getElementById("custom_query").value;
 
-            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me + "&variations=" + variations + "$cq=" + custom_query;
+            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me + "&variations=" + variations + "&cq=" + custom_query;
 
             fetch(url)
                 .then(function (response) {
