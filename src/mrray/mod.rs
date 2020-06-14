@@ -51,7 +51,9 @@ pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envio
 }
 
 pub fn filter_item_nemo(item_nemo: &ItemNemo, mercado_envios: &str, item_type: &str) -> bool {
-    if mercado_envios == "puis" {
+    if mercado_envios == "puis" && item_type == "manufacturing" {
+        item_nemo.has_puis && item_nemo.has_manufacturing_time
+    } else if mercado_envios == "puis" {
         item_nemo.has_puis
     } else if item_type == "manufacturing" {
         item_nemo.has_manufacturing_time
@@ -69,6 +71,8 @@ fn resolve_q(site: &str, it: &str, mp: &str, variations: &str, custom_query: &st
 
     if custom_query != "NONE" {
         String::from(custom_query)
+    } else if it == "manufacturing" {
+        String::from("sofa")
     } else if it == "granel" {
         String::from("piso-vinilico")
     } else if mp == "highestprice" {
