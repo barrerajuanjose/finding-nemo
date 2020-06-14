@@ -37,78 +37,82 @@
     </style>
 </head>
 <body class="bg-light">
+    <nav class="navbar navbar-default navbar-fixed-top"></nav>
     <div class="container-fluid">
-        <label for="sites">Site:</label>
-        <select name="site" id="sites">
-            <option value="MLB">MLB</option>
-            <option value="MLA">MLA</option>
-            <option value="MLM">MLM</option>
-        </select>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="sites">Site:</label>
+                <select name="site" id="sites">
+                    <option value="MLB">MLB</option>
+                    <option value="MLA">MLA</option>
+                    <option value="MLM">MLM</option>
+                </select>
+            </div>
 
-        <br>
+            <div class="form-group">
+                <label for="itemtypes">Items:</label>
+                <select name="it" id="itemtypes">
+                    <option value="">Cualquiera</option>
+                    <option value="to">Tienda Oficial</option>
+                    <option value="ds">Mejores vendedores</option>
+                    <option value="granel">Venta a granel</option>
+                    <option value="cpg">Supermercado</option>
+                    <option value="refurbished">Reacondicionado</option>
+                    <option value="manufacturing">Con tiempo de Manufactura (TODO)</option>
+                </select>
+            </div>
 
-        <label for="itemtypes">Items:</label>
-        <select name="it" id="itemtypes">
-            <option value="">Cualquiera</option>
-            <option value="to">Tienda Oficial</option>
-            <option value="ds">Mejores vendedores</option>
-            <option value="granel">Venta a granel</option>
-            <option value="cpg">Supermercado</option>
-            <option value="refurbished">Reacondicionado</option>
-            <option value="manufacturing">Con tiempo de Manufactura (TODO)</option>
-        </select>
+            <div class="form-group">
+                <label for="variations">Variations:</label>
+                <select name="variations" id="variations">
+                    <option value="">Cualquiera</option>
+                    <option value="one">Una</option>
+                    <option value="two">Dos</option>
+                    <option value="more">Más de 2</option>
+                </select>
+            </div>
 
-        <br>
+            <div class="form-group">
+                <label for="mercadopago">Mercado pago:</label>
+                <select name="mp" id="mercadopago">
+                    <option value="">Cualquiera</option>
+                    <option value="pjs">Cuotas sin interes</option>
+                    <option value="installments">Con cuotas con y sin intereses</option>
+                    <option value="highestprice">Items con precios altos, no se pueden pagar con MP</option>
+                    <option value="lowestprice">Items con precios bajos</option>
+                </select>
+            </div>
 
-        <label for="variations">Variations:</label>
-        <select name="variations" id="variations">
-            <option value="">Cualquiera</option>
-            <option value="one">Una</option>
-            <option value="two">Dos</option>
-            <option value="more">Más de 2</option>
-        </select>
+            <div class="form-group">
+                <label for="mercadoenvios">Mercado envios:</label>
+                <select name="me" id="mercadoenvios">
+                    <option value="">Cualquiera</option>
+                    <option value="me2">Con ME</option>
+                    <option value="full">Full</option>
+                    <option value="puis">Envío sucursal (TODO)</option>
+                    <option value="cbt">Envio internacional (Solo MLB y MLM)</option>
+                </select>
+            </div>
 
-        <br>
+            <div class="form-group">
+                <label for="itemcondition">Nuevo/Usado:</label>
+                <select name="me" id="itemcondition">
+                    <option value="">Cualquiera</option>
+                    <option value="new">Nuevo</option>
+                    <option value="used">Usado</option>
+                </select>
+            </div>
 
-        <label for="mercadopago">Mercado pago:</label>
-        <select name="mp" id="mercadopago">
-            <option value="">Cualquiera</option>
-            <option value="pjs">Cuotas sin interes</option>
-            <option value="installments">Con cuotas con y sin intereses</option>
-            <option value="highestprice">Items con precios altos, no se pueden pagar con MP</option>
-            <option value="lowestprice">Items con precios bajos</option>
-        </select>
+            <div class="form-group">
+                <label for="custom_query">Custom query:</label>
+                <input type="text" id="custom_query">
+                <span id="helpBlock" class="help-block">OjO, Si elegiste CBT o CPG se va a ignorar este campo.</span>
+            </div>
 
-        <br>
-
-        <label for="mercadoenvios">Mercado envios:</label>
-        <select name="me" id="mercadoenvios">
-            <option value="">Cualquiera</option>
-            <option value="me2">Con ME</option>
-            <option value="full">Full</option>
-            <option value="puis">Envío sucursal (TODO)</option>
-            <option value="cbt">Envio internacional (Solo MLB y MLM)</option>
-        </select>
-
-        <br>
-
-        <label for="itemcondition">Nuevo/Usado:</label>
-        <select name="me" id="itemcondition">
-            <option value="">Cualquiera</option>
-            <option value="new">Nuevo</option>
-            <option value="used">Usado</option>
-        </select>
-
-        <br>
-
-        <label for="custom_query">Custom query:</label>
-        <input type="text" id="custom_query">
-
-        <br>
-
-        <input type="button" onclick="getNemos()" value="Find It" style="margin-bottom: 1.9rem;">
-
-        <br>
+            <div class="form-group">
+                <input type="button" onclick="getNemos()" value="Find It" class="btn btn-primary">
+            </div>
+        </form>
 
         <div id="results">
             <div id="nemo_search">

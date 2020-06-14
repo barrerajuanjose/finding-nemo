@@ -102,15 +102,17 @@ fn map_nemo_to_dto(nemo: Nemo) -> NemoDto {
         .collect();
 
     for seller_type_entry in nemo.sellers_types {
-        let mut sellers = Vec::new();
-
-        for seller_nemo in seller_type_entry.1 {
-            sellers.push(SellerDto {
-                id: seller_nemo.id,
-                reputation: seller_nemo.reputation,
-                search_url: seller_nemo.search_url,
+        let sellers = seller_type_entry.1
+            .iter()
+            .take(5)
+            .map(|seller_nemo| {
+                SellerDto {
+                    id: seller_nemo.id,
+                    reputation: seller_nemo.reputation.to_string(),
+                    search_url: seller_nemo.search_url.to_string(),
+                }
             })
-        }
+            .collect();
 
         sellers_types.push(SellerTypeDto {
             id: seller_type_entry.0,
