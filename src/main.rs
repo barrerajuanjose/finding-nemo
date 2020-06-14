@@ -80,15 +80,15 @@ struct SellerDto {
 }
 
 fn map_nemo_to_dto(nemo: Nemo) -> NemoDto {
-    let mut items = Vec::new();
     let mut sellers_types = Vec::new();
-
-    for result in nemo.items {
-        items.push(ItemDto {
-            id: result.id,
-            permalink: result.permalink
-        });
-    }
+    let items:Vec<ItemDto> = nemo.items.iter()
+        .take(20)
+        .map(|result|
+            ItemDto {
+                id: result.id.to_string(),
+                permalink: result.permalink.to_string(),
+            })
+        .collect();
 
     for seller_type_entry in nemo.sellers_types {
         let mut sellers = Vec::new();
