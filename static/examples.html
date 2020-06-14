@@ -175,6 +175,7 @@
 
             let params = getParams().join("&");
             let url = "/search?" + params;
+            let nemoUrl = "http://finding-nemo-jj.herokuapp.com?" + params;
 
             fetch(url)
                 .then(function (response) {
@@ -183,7 +184,7 @@
                 })
                 .then(function (result) {
                     let html = "<a href='" + result.search_url + "'>Search url</a><br>";
-                    html += "<a href='http://finding-nemo-jj.herokuapp.com?" + params + "'>Finding Nemo URL</a><br>";
+                    html += "<input id='dataToShare' type='text' value='" + nemoUrl + "'><button class='btn btn-link' onclick='copyToShare()'>Copiar Nemo URL para compartir</button><br>";
                     document.getElementById("nemo_search").innerHTML = html;
 
                     processSellersTypes(result.sellers_types)
@@ -281,6 +282,15 @@
             }
 
             return params;
+        }
+
+        function copyToShare() {
+            var copyText = document.getElementById("dataToShare");
+
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+
+            document.execCommand("copy");
         }
     </script>
 </body>
