@@ -31,7 +31,7 @@ pub async fn find_nemo(site_param: Option<&String>, mp: Option<&String>, me: Opt
     let mercado_envios = me.map_or(String::from("NONE"), |s| s.to_string());
     let variations = variations.map_or(String::from("NONE"), |s| s.to_string());
     let item_condition = ic.map_or(String::from("NONE"), |s| s.to_string());
-    let custom_query = cq.map_or(String::from(""), |s| if s.is_empty() { String::from("NONE") } else { s.to_string() });
+    let custom_query = cq.map_or(String::from("NONE"), |s| if s.len() <= 2 { String::from("NONE") } else { s.to_string() });
 
     let params = get_params(site.as_str(), item_type.as_str(), mercado_pago.as_str(), mercado_envios.as_str(), variations.as_str(), item_condition.as_str(), custom_query.as_str());
 

@@ -39,7 +39,7 @@
 <body class="bg-light" onload="checkParams()">
     <nav class="navbar navbar-default navbar-fixed-top"></nav>
     <div class="container-fluid">
-        <form class="form-horizontal">
+        <div class="form-horizontal">
             <div class="form-group">
                 <label for="sites">Site:</label>
                 <select name="site" id="sites">
@@ -113,7 +113,7 @@
             <div class="form-group">
                 <input type="button" onclick="getNemos()" value="Find It" class="btn btn-primary">
             </div>
-        </form>
+        </div>
 
         <div id="results">
             <div id="nemo_search">
@@ -160,22 +160,11 @@
             setSelectedValue("itemcondition", urlParams.get('ic'));
             document.getElementById("custom_query").value = urlParams.get('q');
 
-            let site = getSelectedValue("sites");
-            let it = getSelectedValue("itemtypes");
-            let mp = getSelectedValue("mercadopago");
-            let me = getSelectedValue("mercadoenvios");
-            let variations = getSelectedValue("variations");
-            let ic = getSelectedValue("itemcondition");
-            let custom_query = document.getElementById("custom_query").value;
+            let params = getParams();
 
-            if (it != "" ||
-                mp != "" ||
-                me != "" ||
-                variations != "" ||
-                ic != "" ||
-                custom_query != "") {
-                    getNemos();
-                }
+            if (params.length > 1) {
+                getNemos();
+            }
         }
 
         function getNemos() {
@@ -184,15 +173,8 @@
             document.getElementById("nemo_items").innerHTML = "";
             document.getElementById("results").classList.add("loader");
 
-            let site = getSelectedValue("sites");
-            let it = getSelectedValue("itemtypes");
-            let mp = getSelectedValue("mercadopago");
-            let me = getSelectedValue("mercadoenvios");
-            let variations = getSelectedValue("variations");
-            let ic = getSelectedValue("itemcondition");
-            let custom_query = document.getElementById("custom_query").value;
-
-            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me + "&variations=" + variations + "&cq=" + custom_query + "&ic=" + ic;
+            let params = getParams().join("&");
+            let url = "/search?" + params;
 
             fetch(url)
                 .then(function (response) {
@@ -201,6 +183,7 @@
                 })
                 .then(function (result) {
                     let html = "<a href='" + result.search_url + "'>Search url</a><br>";
+                    html += "<a href='http://finding-nemo-jj.herokuapp.com?" + params + "'>Finding Nemo URL</a><br>";
                     document.getElementById("nemo_search").innerHTML = html;
 
                     processSellersTypes(result.sellers_types)
@@ -256,6 +239,48 @@
 
         function getItemUrl(item) {
             return "<a href='" + item.permalink + "'>" + item.id + "</a><br>";
+        }
+
+        function getParams() {
+            let site = getSelectedValue("sites");
+            let it = getSelectedValue("itemtypes");
+            let mp = getSelectedValue("mercadopago");
+            let me = getSelectedValue("mercadoenvios");
+            let variations = getSelectedValue("variations");
+            let ic = getSelectedValue("itemcondition");
+            let custom_query = document.getElementById("custom_query").value;
+
+            let params = [];
+
+            if (site != "") {
+                params.push("site=" + site);
+            }
+
+            if (it != "") {
+                params.push("it=" + it);
+            }
+
+            if (mp != "") {
+                params.push("mp=" + mp);
+            }
+
+            if (me != "") {
+                params.push("me=" + me);
+            }
+
+            if (variations != "") {
+                params.push("vatiations=" + variations);
+            }
+
+            if (ic != "") {
+                params.push("ic=" + ic);
+            }
+
+            if (custom_query != "") {
+                params.push("cq=" + custom_query);
+            }
+
+            return params;
         }
     </script>
 </body>
