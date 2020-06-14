@@ -55,6 +55,15 @@
 
     <br>
 
+    <label for="itemcondition">Nuevo/Usado:</label>
+    <select name="me" id="itemcondition">
+        <option value="">Cualquiera</option>
+        <option value="new">Nuevo</option>
+        <option value="used">Usado</option>
+    </select>
+
+    <br>
+
     <label for="custom_query">Custom query:</label>
     <input type="text" id="custom_query">
 
@@ -90,9 +99,10 @@
             let mp = getSelectedValue("mercadopago");
             let me = getSelectedValue("mercadoenvios");
             let variations = getSelectedValue("variations");
+            let ic = getSelectedValue("itemcondition");
             let custom_query = document.getElementById("custom_query").value;
 
-            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me + "&variations=" + variations + "&cq=" + custom_query;
+            let url = "/search?site=" + site + "&it=" + it + "&mp=" + mp + "&me=" + me + "&variations=" + variations + "&cq=" + custom_query + "&ic=" + ic;
 
             fetch(url)
                 .then(function (response) {

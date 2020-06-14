@@ -1,4 +1,4 @@
-pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envios: &str, variations: &str, custom_query: &str) -> String {
+pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envios: &str, variations: &str, item_condition: &str, custom_query: &str) -> String {
     let mut params = String::from("");
 
     if mercado_envios == "cbt" {
@@ -36,6 +36,12 @@ pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envio
     match mercado_envios {
         "me1" | "me2" => params += "&shipping=mercadoenvios",
         "full" => params += "&shipping=fulfillment",
+        _ => println!("{}", "Not value".to_string()),
+    }
+
+    match  item_condition {
+        "new" => params += "&ITEM_CONDITION=2230284",
+        "used" => params += "&ITEM_CONDITION=2230581",
         _ => println!("{}", "Not value".to_string()),
     }
 
