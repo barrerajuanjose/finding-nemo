@@ -1,6 +1,6 @@
 use crate::search::{get_host_by_site, ResultsResponse, get_seller_search};
 use crate::search::get_items_ids;
-use crate::mrray::get_params;
+use crate::mrray::{get_params, filter_item_nemo};
 use std::collections::{HashMap, HashSet};
 use crate::item::get_item;
 use crate::seller::get_seller;
@@ -15,6 +15,8 @@ pub struct Nemo {
 pub struct ItemNemo {
     pub id: String,
     pub permalink: String,
+    pub has_puis: bool,
+    pub has_manufacturing_time: bool,
     seller_id: u32,
 }
 
@@ -39,22 +41,24 @@ pub async fn find_nemo(site_param: Option<&String>, mp: Option<&String>, me: Opt
 
     let search_url = format!("{}?{}", get_host_by_site(site.as_str()), params);
 
-    return map_response_to_nemo(search_url.as_str(), results, site.as_str()).await;
+    return map_response_to_nemo(search_url.as_str(), results, site.as_str(), mercado_envios.as_str(), item_type.as_str()).await;
 }
 
-async fn map_response_to_nemo(search_url: &str, results: Vec<ResultsResponse>, site: &str) -> Nemo {
+async fn map_response_to_nemo(search_url: &str, results: Vec<ResultsResponse>, site: &str, mercado_envios: &str, item_type: &str) -> Nemo {
     let items_ids: Vec<&str> = results.iter().map(|result| { result.id.as_str() }).collect();
     let mut sellers_types = HashMap::new();
 
-    let items = future::join_all(items_ids.into_iter().map(|item_id| async move {
+    let items: Vec<ItemNemo> = future::join_all(items_ids.into_iter().map(|item_id| async move {
         let item = get_item(item_id).await;
 
         ItemNemo {
             id: item.id,
             permalink: item.permalink,
+            has_puis: item.has_puis,
+            has_manufacturing_time: item.has_manufacturing_time,
             seller_id: item.seller_id,
         }
-    })).await;
+    })).await.into_iter().filter(|item| filter_item_nemo(item, mercado_envios, item_type)).collect();
 
     let sellers_ids: HashSet<u32> = items.iter().map(|item| { item.seller_id }).collect();
 
