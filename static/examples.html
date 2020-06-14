@@ -1,91 +1,147 @@
 <head>
     <title>Finding Nemo</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <style>
+        .loader {
+          border: 16px solid #f3f3f3;
+          border-radius: 50%;
+          border-top: 16px solid #3498db;
+          width: 80px;
+          height: 80px;
+          -webkit-animation: spin 2s linear infinite; /* Safari */
+          animation: spin 2s linear infinite;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .grid_two_columns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid_one_columns {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+        }
+    </style>
 </head>
-    <label for="sites">Site:</label>
-    <select name="site" id="sites">
-        <option value="MLB">MLB</option>
-        <option value="MLA">MLA</option>
-        <option value="MLM">MLM</option>
-    </select>
+<body class="bg-light">
+    <div class="container-fluid">
+        <label for="sites">Site:</label>
+        <select name="site" id="sites">
+            <option value="MLB">MLB</option>
+            <option value="MLA">MLA</option>
+            <option value="MLM">MLM</option>
+        </select>
 
-    <br>
+        <br>
 
-    <label for="itemtypes">Items:</label>
-    <select name="it" id="itemtypes">
-        <option value="">Cualquiera</option>
-        <option value="to">Tienda Oficial</option>
-        <option value="ds">Mejores vendedores</option>
-        <option value="granel">Venta a granel</option>
-        <option value="cpg">Supermercado</option>
-        <option value="refurbished">Reacondicionado</option>
-        <option value="manufacturing">Con tiempo de Manufactura (TODO)</option>
-    </select>
+        <label for="itemtypes">Items:</label>
+        <select name="it" id="itemtypes">
+            <option value="">Cualquiera</option>
+            <option value="to">Tienda Oficial</option>
+            <option value="ds">Mejores vendedores</option>
+            <option value="granel">Venta a granel</option>
+            <option value="cpg">Supermercado</option>
+            <option value="refurbished">Reacondicionado</option>
+            <option value="manufacturing">Con tiempo de Manufactura (TODO)</option>
+        </select>
 
-    <br>
+        <br>
 
-    <label for="variations">Variations:</label>
-    <select name="variations" id="variations">
-        <option value="">Cualquiera</option>
-        <option value="one">Una</option>
-        <option value="two">Dos</option>
-        <option value="more">Más de 2</option>
-    </select>
+        <label for="variations">Variations:</label>
+        <select name="variations" id="variations">
+            <option value="">Cualquiera</option>
+            <option value="one">Una</option>
+            <option value="two">Dos</option>
+            <option value="more">Más de 2</option>
+        </select>
 
-    <br>
+        <br>
 
-    <label for="mercadopago">Mercado pago:</label>
-    <select name="mp" id="mercadopago">
-        <option value="">Cualquiera</option>
-        <option value="pjs">Cuotas sin interes</option>
-        <option value="installments">Con cuotas con y sin intereses</option>
-        <option value="highestprice">Items con precios altos, no se pueden pagar con MP</option>
-        <option value="lowestprice">Items con precios bajos</option>
-    </select>
+        <label for="mercadopago">Mercado pago:</label>
+        <select name="mp" id="mercadopago">
+            <option value="">Cualquiera</option>
+            <option value="pjs">Cuotas sin interes</option>
+            <option value="installments">Con cuotas con y sin intereses</option>
+            <option value="highestprice">Items con precios altos, no se pueden pagar con MP</option>
+            <option value="lowestprice">Items con precios bajos</option>
+        </select>
 
-    <br>
+        <br>
 
-    <label for="mercadoenvios">Mercado envios:</label>
-    <select name="me" id="mercadoenvios">
-        <option value="">Cualquiera</option>
-        <option value="me2">Con ME</option>
-        <option value="full">Full</option>
-        <option value="puis">Envío sucursal (TODO)</option>
-        <option value="cbt">Envio internacional (Solo MLB y MLM)</option>
-    </select>
+        <label for="mercadoenvios">Mercado envios:</label>
+        <select name="me" id="mercadoenvios">
+            <option value="">Cualquiera</option>
+            <option value="me2">Con ME</option>
+            <option value="full">Full</option>
+            <option value="puis">Envío sucursal (TODO)</option>
+            <option value="cbt">Envio internacional (Solo MLB y MLM)</option>
+        </select>
 
-    <br>
+        <br>
 
-    <label for="itemcondition">Nuevo/Usado:</label>
-    <select name="me" id="itemcondition">
-        <option value="">Cualquiera</option>
-        <option value="new">Nuevo</option>
-        <option value="used">Usado</option>
-    </select>
+        <label for="itemcondition">Nuevo/Usado:</label>
+        <select name="me" id="itemcondition">
+            <option value="">Cualquiera</option>
+            <option value="new">Nuevo</option>
+            <option value="used">Usado</option>
+        </select>
 
-    <br>
+        <br>
 
-    <label for="custom_query">Custom query:</label>
-    <input type="text" id="custom_query">
+        <label for="custom_query">Custom query:</label>
+        <input type="text" id="custom_query">
 
-    <br>
+        <br>
 
-    <input type="button" onclick="getNemos()" value="Find It">
+        <input type="button" onclick="getNemos()" value="Find It" style="margin-bottom: 1.9rem;">
 
-    <br>
+        <br>
 
-    <div id="nemo_search">
+        <div id="results">
+            <div id="nemo_search">
 
-    </div>
+            </div>
 
-    <br>
+            <br>
 
-    <div id="nemos" style="display: grid; grid-template-columns: repeat(2, 1fr);">
-        <div id="nemo_sellers">
+            <div id="nemos" class="grid_two_columns">
+                <div id="nemo_sellers">
 
+                </div>
+                <div id="nemo_items">
+
+                </div>
+            </div>
         </div>
-        <div id="nemo_items">
 
-        </div>
+        <br/>
+
+        <h2>Ejemplos en MLB</h2>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?mp=psj&site=MLB'>Sem Juros</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?mp=installments&site=MLB'>Con cuotas</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?mp=highestprice&site=MLB'>Caros (Sin MP)</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?mp=lowestprice&site=MLB'>Baratos</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?me=full&site=MLB'>Full</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?me=me2&site=MLB'>Con shipping</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?it=to&site=MLB'>Tiendas Oficiales</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?it=bs&site=MLB'>Mejores vendedores</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?it=video&site=MLB'>Con videos</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?it=granel&site=MLB'>Venta a granel</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?it=manufacturing&site=MLB'>Tiempo manufactura</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com/search?me=cpg&site=MLB'>Envío internacional</a><br/>
     </div>
 
     <script>
@@ -93,6 +149,7 @@
             document.getElementById("nemo_search").innerHTML = "";
             document.getElementById("nemo_sellers").innerHTML = "";
             document.getElementById("nemo_items").innerHTML = "";
+            document.getElementById("results").classList.add("loader");
 
             let site = getSelectedValue("sites");
             let it = getSelectedValue("itemtypes");
@@ -106,6 +163,7 @@
 
             fetch(url)
                 .then(function (response) {
+                    document.getElementById("results").classList.remove("loader");
                     return response.json();
                 })
                 .then(function (result) {
@@ -155,20 +213,4 @@
             return "<a href='" + item.permalink + "'>" + item.id + "</a><br>";
         }
     </script>
-
-    <br/>
-
-    <h2>Ejemplos en MLB</h2>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?mp=psj&site=MLB'>Sem Juros</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?mp=installments&site=MLB'>Con cuotas</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?mp=highestprice&site=MLB'>Caros (Sin MP)</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?mp=lowestprice&site=MLB'>Baratos</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?me=full&site=MLB'>Full</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?me=me2&site=MLB'>Con shipping</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?it=to&site=MLB'>Tiendas Oficiales</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?it=bs&site=MLB'>Mejores vendedores</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?it=video&site=MLB'>Con videos</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?it=granel&site=MLB'>Venta a granel</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?it=manufacturing&site=MLB'>Tiempo manufactura</a><br/>
-    <a href='http://finding-nemo-jj.herokuapp.com/search?me=cpg&site=MLB'>Envío internacional</a><br/>
 </body>
