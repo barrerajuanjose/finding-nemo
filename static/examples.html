@@ -36,7 +36,7 @@
         }
     </style>
 </head>
-<body class="bg-light">
+<body class="bg-light" onload="checkParams()">
     <nav class="navbar navbar-default navbar-fixed-top"></nav>
     <div class="container-fluid">
         <form class="form-horizontal">
@@ -135,21 +135,49 @@
         <br/>
 
         <h2>Ejemplos en MLB</h2>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?mp=psj&site=MLB'>Sem Juros</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?mp=installments&site=MLB'>Con cuotas</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?mp=highestprice&site=MLB'>Caros (Sin MP)</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?mp=lowestprice&site=MLB'>Baratos</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?me=full&site=MLB'>Full</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?me=me2&site=MLB'>Con shipping</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?it=to&site=MLB'>Tiendas Oficiales</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?it=bs&site=MLB'>Mejores vendedores</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?it=video&site=MLB'>Con videos</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?it=granel&site=MLB'>Venta a granel</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?it=manufacturing&site=MLB'>Tiempo manufactura</a><br/>
-        <a href='http://finding-nemo-jj.herokuapp.com/search?me=cpg&site=MLB'>Envío internacional</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?mp=psj&site=MLB'>Sem Juros</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?mp=installments&site=MLB'>Con cuotas</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?mp=highestprice&site=MLB'>Caros (Sin MP)</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?mp=lowestprice&site=MLB'>Baratos</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?me=full&site=MLB'>Full</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?me=me2&site=MLB'>Con shipping</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?it=to&site=MLB'>Tiendas Oficiales</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?it=bs&site=MLB'>Mejores vendedores</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?it=video&site=MLB'>Con videos</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?it=granel&site=MLB'>Venta a granel</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?it=manufacturing&site=MLB'>Tiempo manufactura</a><br/>
+        <a href='http://finding-nemo-jj.herokuapp.com?me=cpg&site=MLB'>Envío internacional</a><br/>
     </div>
 
     <script>
+        function checkParams() {
+            let urlParams = new URLSearchParams(window.location.search);
+            setSelectedValue("sites", urlParams.get('site'));
+            setSelectedValue("itemtypes", urlParams.get('it'));
+            setSelectedValue("mercadopago", urlParams.get('mp'));
+            setSelectedValue("mercadoenvios", urlParams.get('me'));
+            setSelectedValue("variations", urlParams.get('variations'));
+            setSelectedValue("itemcondition", urlParams.get('ic'));
+            document.getElementById("custom_query").value = urlParams.get('q');
+
+            let site = getSelectedValue("sites");
+            let it = getSelectedValue("itemtypes");
+            let mp = getSelectedValue("mercadopago");
+            let me = getSelectedValue("mercadoenvios");
+            let variations = getSelectedValue("variations");
+            let ic = getSelectedValue("itemcondition");
+            let custom_query = document.getElementById("custom_query").value;
+
+            if (it != "" ||
+                mp != "" ||
+                me != "" ||
+                variations != "" ||
+                ic != "" ||
+                custom_query != "") {
+                    getNemos();
+                }
+        }
+
         function getNemos() {
             document.getElementById("nemo_search").innerHTML = "";
             document.getElementById("nemo_sellers").innerHTML = "";
@@ -187,6 +215,18 @@
         function getSelectedValue(comboId) {
             let e = document.getElementById(comboId);
             return e.options[e.selectedIndex].value;
+        }
+
+        function setSelectedValue(comboId, value) {
+            if (value) {
+                let e = document.getElementById(comboId);
+                for (i = 0; i < e.length; ++i){
+                    if (e.options[i].value == value){
+                        e.value = value;
+                        break;
+                    }
+                }
+            }
         }
 
         function processSellersTypes(sellers_types) {
