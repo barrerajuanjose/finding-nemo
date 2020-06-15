@@ -4,13 +4,15 @@ mod search;
 mod item;
 mod seller;
 
-use actix_web::{ web, App, HttpRequest, HttpResponse, HttpServer, Result };
+use actix_web::http::header::{ContentDisposition, DispositionType};
+use actix_web::{ web, App, HttpRequest, Error, HttpResponse, HttpServer, Result };
 use serde::{ Serialize };
 use std::collections::HashMap;
 use std::env;
 use crate::marlin::Nemo;
 use std::fs::File;
 use std::io::Read;
+use actix_files;
 
 async fn search(req: HttpRequest) -> Result<HttpResponse> {
     let params: HashMap<String, String> = req
@@ -36,7 +38,7 @@ async fn search(req: HttpRequest) -> Result<HttpResponse> {
 
 async fn index(_req: HttpRequest) -> Result<HttpResponse> {
     let current_dir = env::current_dir().unwrap();
-    let index_path = format!("{}{}", current_dir.display(), "/static/examples.html");
+    let index_path = format!("{}{}", current_dir.display(), "/html/index.html");
     let mut file = File::open(index_path)?;
     let mut contents = String::new();
 
@@ -45,6 +47,19 @@ async fn index(_req: HttpRequest) -> Result<HttpResponse> {
     Ok(HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
         .body(contents))
+}
+
+async fn files(req: HttpRequest) -> Result<actix_files::NamedFile, Error> {
+    let current_dir = env::current_dir().unwrap();
+    let path_str = format!("{}/static/{}", current_dir.display(), req.match_info().query("filename"));
+    let file = actix_files::NamedFile::open(path_str)?;
+
+    Ok(file
+        .use_last_modified(true)
+        .set_content_disposition(ContentDisposition {
+            disposition: DispositionType::Attachment,
+            parameters: vec![],
+        }))
 }
 
 #[actix_rt::main]
@@ -58,6 +73,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .route("/", web::get().to(index))
             .route("/search", web::get().to(search))
+            .route("/static/{filename:.*}", web::get().to(files))
         })
         .bind(("0.0.0.0", port))?
         .run()
