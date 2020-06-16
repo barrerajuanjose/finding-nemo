@@ -30,7 +30,7 @@ pub fn get_params(site: &str, item_type: &str, mercado_pago: &str, mercado_envio
     match item_type {
         "to" => params += "&official_store=all",
         "bs" => params += "&power_seller=yes",
-        "video" => params += "&has_video=true",
+        "video" => params += "&has_video=yes",
         "refurbished" => params += "&ITEM_CONDITION=2230582",
         _ => println!("{}", "Not value".to_string()),
     }
