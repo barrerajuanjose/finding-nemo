@@ -2,11 +2,13 @@
 <html>
     <head>
     <script>
-        var originalLocation = window.location;
-         window.location.replace("meli://item?id=MLA620078538");
-         setTimeout(function () {
-           window.location.replace(originalLocation.href);
-         }, 2000);
+         var originalLocation = window.location;
+         if (!originalLocation.href.includes("noretry")) {
+             window.location.replace("meli://item?id=MLA620078538");
+             setTimeout(function () {
+               window.location.replace(originalLocation.href + "#noretry");
+             }, 2000);
+         }
     </script>
     </head>
     <body class="bg-light" onload="checkParams()">
