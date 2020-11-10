@@ -62,6 +62,19 @@ async fn files(req: HttpRequest) -> Result<actix_files::NamedFile, Error> {
         }))
 }
 
+async fn trymeliapp(_req: HttpRequest) -> Result<HttpResponse> {
+    let current_dir = env::current_dir().unwrap();
+    let index_path = format!("{}{}", current_dir.display(), "/html/deeplink.html");
+    let mut file = File::open(index_path)?;
+    let mut contents = String::new();
+
+    file.read_to_string(&mut contents)?;
+
+    Ok(HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(contents))
+}
+
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     let port = env::var("PORT")
@@ -74,6 +87,7 @@ async fn main() -> std::io::Result<()> {
             .route("/", web::get().to(index))
             .route("/search", web::get().to(search))
             .route("/static/{filename:.*}", web::get().to(files))
+            .route("/trymeliapp", web::get().to(trymeliapp))
         })
         .bind(("0.0.0.0", port))?
         .run()
