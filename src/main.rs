@@ -14,6 +14,8 @@ use std::fs::File;
 use std::io::Read;
 use actix_files;
 
+use handlebars::Handlebars;
+
 async fn search(req: HttpRequest) -> Result<HttpResponse> {
     let params: HashMap<String, String> = req
         .uri()
@@ -62,32 +64,38 @@ async fn files(req: HttpRequest) -> Result<actix_files::NamedFile, Error> {
         }))
 }
 
-async fn trymeliapp(_req: HttpRequest) -> Result<HttpResponse> {
-    let current_dir = env::current_dir().unwrap();
-    let index_path = format!("{}{}", current_dir.display(), "/html/deeplink.html");
-    let mut file = File::open(index_path)?;
-    let mut contents = String::new();
-
-    file.read_to_string(&mut contents)?;
+async fn used_cars(hb: web::Data<Handlebars<'_>>, _req: HttpRequest) -> Result<HttpResponse> {
+    let data = "pepe";
 
     Ok(HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
-        .body(contents))
+        .body(hb.render("used_cars", &data).unwrap()))
 }
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
+    // Handlebars uses a repository for the compiled templates. This object must be
+    // shared between the application threads, and is therefore passed to the
+    // Application Builder as an atomic reference-counted pointer.
+    let mut handlebars = Handlebars::new();
+    handlebars
+        .register_template_file("used_cars", "./html/templates/used_cars.html")
+        .unwrap();
+
+    let handlebars_ref = web::Data::new(handlebars);
+
     let port = env::var("PORT")
         .unwrap_or_else(|_| "8080".to_string())
         .parse()
         .expect("PORT must be a number");
 
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         App::new()
+            .app_data(handlebars_ref.clone())
             .route("/", web::get().to(index))
             .route("/search", web::get().to(search))
             .route("/static/{filename:.*}", web::get().to(files))
-            .route("/trymeliapp", web::get().to(trymeliapp))
+            .route("/autos-usados-mercadolibre-ultima-oportunidad", web::get().to(used_cars))
         })
         .bind(("0.0.0.0", port))?
         .run()

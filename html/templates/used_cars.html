@@ -1,0 +1,272 @@
+<!doctype html>
+<html>
+<head profile="http://www.w3.org/2005/10/profile">
+    <title>Autos Usados Mercado Libre Útima Oportunidad</title>
+    <meta name="description" content="Publicaciones de autos usados que finalizan hoy, ideales para hacer una oferta!." data-head-react="true"/>
+
+    <link rel="apple-touch-icon" href="/static/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/static/favicon.png">
+    <link rel="shortcut icon" href="/static/favicon.png">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body class="bg-light" onload="checkParams()">
+<nav class="navbar navbar-default navbar-fixed-top"></nav>
+<div class="container-fluid">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label for="sites">Site:</label>
+            <select name="site" id="sites">
+                <option value="MLB">MLB</option>
+                <option value="MLA">MLA</option>
+                <option value="MLM">MLM</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="itemtypes">Items:</label>
+            <select name="it" id="itemtypes">
+                <option value="">Cualquiera</option>
+                <option value="to">Tienda Oficial</option>
+                <option value="ds">Mejores vendedores</option>
+                <option value="granel">Venta a granel</option>
+                <option value="cpg">Supermercado</option>
+                <option value="refurbished">Reacondicionado</option>
+                <option value="video">Con Video</option>
+                <option value="manufacturing">Con tiempo de Manufactura</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="variations">Variations:</label>
+            <select name="variations" id="variations">
+                <option value="">Cualquiera</option>
+                <option value="one">Una</option>
+                <option value="two">Dos</option>
+                <option value="more">Más de 2</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="mercadopago">Mercado pago:</label>
+            <select name="mp" id="mercadopago">
+                <option value="">Cualquiera</option>
+                <option value="pjs">Cuotas sin interes</option>
+                <option value="installments">Con cuotas con y sin intereses</option>
+                <option value="highestprice">Items con precios altos, no se pueden pagar con MP</option>
+                <option value="lowestprice">Items con precios bajos</option>
+            </select>
+            <span id="helpBlockmp" class="help-block">Elegir Items con precios bajos para tener gran variedad de sellers.</span>
+        </div>
+
+        <div class="form-group">
+            <label for="mercadoenvios">Mercado envios:</label>
+            <select name="me" id="mercadoenvios">
+                <option value="">Cualquiera</option>
+                <option value="me2">Con ME</option>
+                <option value="full">Full</option>
+                <option value="puis">Envío sucursal</option>
+                <option value="cbt">Envio internacional (Solo MLB y MLM)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="itemcondition">Nuevo/Usado:</label>
+            <select name="me" id="itemcondition">
+                <option value="">Cualquiera</option>
+                <option value="new">Nuevo</option>
+                <option value="used">Usado</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="custom_query">Custom query:</label>
+            <input type="text" id="custom_query">
+            <span id="helpBlock" class="help-block">OjO, Si elegiste CBT o CPG se va a ignorar este campo.</span>
+        </div>
+
+        <div class="form-group">
+            <input type="button" onclick="getNemos()" value="Find It" class="btn btn-primary">
+        </div>
+    </div>
+
+    <div id="results">
+        <div id="nemo_search">
+
+        </div>
+
+        <br>
+
+        <div id="nemos" class="grid_two_columns">
+            <div id="nemo_sellers">
+
+            </div>
+            <div id="nemo_items">
+
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+    <h2>Ejemplos en MLB</h2>
+    <a href='https://finding-nemo-jj.herokuapp.com?mp=psj&site=MLB'>Sem Juros</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?mp=installments&site=MLB'>Con cuotas</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?mp=highestprice&site=MLB'>Caros (Sin MP)</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?mp=lowestprice&site=MLB'>Baratos</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?me=full&site=MLB'>Full</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?me=me2&site=MLB'>Con shipping</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?it=to&site=MLB'>Tiendas Oficiales</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?it=bs&site=MLB'>Mejores vendedores</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?it=video&site=MLB'>Con videos</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?it=granel&site=MLB'>Venta a granel</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?it=manufacturing&site=MLB'>Tiempo manufactura</a><br/>
+    <a href='https://finding-nemo-jj.herokuapp.com?me=cpg&site=MLB'>Envío internacional</a><br/>
+</div>
+
+<script>
+            function checkParams() {
+                let urlParams = new URLSearchParams(window.location.search);
+                setSelectedValue("sites", urlParams.get('site'));
+                setSelectedValue("itemtypes", urlParams.get('it'));
+                setSelectedValue("mercadopago", urlParams.get('mp'));
+                setSelectedValue("mercadoenvios", urlParams.get('me'));
+                setSelectedValue("variations", urlParams.get('variations'));
+                setSelectedValue("itemcondition", urlParams.get('ic'));
+                document.getElementById("custom_query").value = urlParams.get('q');
+
+                let params = getParams();
+
+                if (params.length > 1) {
+                    getNemos();
+                }
+            }
+
+            function getNemos() {
+                document.getElementById("nemo_search").innerHTML = "";
+                document.getElementById("nemo_sellers").innerHTML = "";
+                document.getElementById("nemo_items").innerHTML = "";
+                document.getElementById("results").classList.add("loader");
+
+                let params = getParams().join("&");
+                let url = "/search?" + params;
+                let nemoUrl = "http://finding-nemo-jj.herokuapp.com?" + params;
+
+                fetch(url)
+                    .then(function (response) {
+                        document.getElementById("results").classList.remove("loader");
+                        return response.json();
+                    })
+                    .then(function (result) {
+                        let html = "<a href='" + result.search_url + "'>Search url</a><br>";
+                        html += "<input id='dataToShare' type='text' value='" + nemoUrl + "'><button class='btn btn-link' onclick='copyToShare()'>Copiar Nemo URL para compartir</button><br>";
+                        document.getElementById("nemo_search").innerHTML = html;
+
+                        processSellersTypes(result.sellers_types)
+
+                        processItems(result.items);
+                    })
+                    .catch(function (error) {
+                        document.getElementById("nemo_items").innerHTML = error;
+                    });
+            }
+
+            function getSelectedValue(comboId) {
+                let e = document.getElementById(comboId);
+                return e.options[e.selectedIndex].value;
+            }
+
+            function setSelectedValue(comboId, value) {
+                if (value) {
+                    let e = document.getElementById(comboId);
+                    for (i = 0; i < e.length; ++i){
+                        if (e.options[i].value == value){
+                            e.value = value;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            function processSellersTypes(sellers_types) {
+                let html = "Sellers types:<br>";
+
+                sellers_types.forEach(function(seller_type) {
+                    html += "<ul>";
+                    html += "<dt>" + seller_type.id + "</dt>";
+                    seller_type.sellers.forEach(function(seller) {
+                        html += "<dd><a href='" + seller.search_url + "'>" + seller.id + "</a></dd>";
+                    });
+                    html += "</ul>";
+                });
+
+                document.getElementById("nemo_sellers").innerHTML = html;
+            }
+
+            function processItems(items) {
+                let html = "Items ids:<br>";
+
+                items.forEach(function(item) {
+                    html += getItemUrl(item);
+                });
+
+                document.getElementById("nemo_items").innerHTML = html;
+            }
+
+            function getItemUrl(item) {
+                return "<a href='" + item.permalink + "'>" + item.id + "</a><br>";
+            }
+
+            function getParams() {
+                let site = getSelectedValue("sites");
+                let it = getSelectedValue("itemtypes");
+                let mp = getSelectedValue("mercadopago");
+                let me = getSelectedValue("mercadoenvios");
+                let variations = getSelectedValue("variations");
+                let ic = getSelectedValue("itemcondition");
+                let custom_query = document.getElementById("custom_query").value;
+
+                let params = [];
+
+                if (site != "") {
+                    params.push("site=" + site);
+                }
+
+                if (it != "") {
+                    params.push("it=" + it);
+                }
+
+                if (mp != "") {
+                    params.push("mp=" + mp);
+                }
+
+                if (me != "") {
+                    params.push("me=" + me);
+                }
+
+                if (variations != "") {
+                    params.push("vatiations=" + variations);
+                }
+
+                if (ic != "") {
+                    params.push("ic=" + ic);
+                }
+
+                if (custom_query != "") {
+                    params.push("cq=" + custom_query);
+                }
+
+                return params;
+            }
+
+            function copyToShare() {
+                var copyText = document.getElementById("dataToShare");
+
+                copyText.select();
+                copyText.setSelectionRange(0, 99999);
+
+                document.execCommand("copy");
+            }
+        </script>
+</body>
+<html>
